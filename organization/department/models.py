@@ -1,9 +1,12 @@
 from django.db import models
+from datetime import date
+from django.core.validators import MaxValueValidator
 
 
 class Department(models.Model):
     name = models.CharField(max_length=25)
-    creation_date = models.DateTimeField()
+    creation_date = models.DateField(validators=[MaxValueValidator(limit_value=date.today())])
+    parent_department = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
