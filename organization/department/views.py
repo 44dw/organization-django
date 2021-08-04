@@ -19,6 +19,14 @@ class DepartmentDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.DepartmentSerializer
 
 
+class SubordinateList(APIView):
+
+    def get(self, request, department_id):
+        get_object_or_404(Department, pk=department_id)
+        departments = list(filter(lambda d: d.parent_department_id == department_id, Department.objects.all()))
+        return Response(serializers.DepartmentSerializer(departments, many=True).data)
+
+
 class RenameDepartment(APIView):
 
     def put(self, request, department_id):
