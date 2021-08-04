@@ -8,6 +8,6 @@ class EmployeeList(generics.ListCreateAPIView):
     serializer_class = serializers.EmployeeSerializer
 
 
-class EmployeeDetails(generics.RetrieveAPIView):
+class EmployeeDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = serializers.EmployeeSerializer

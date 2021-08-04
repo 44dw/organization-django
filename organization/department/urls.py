@@ -5,7 +5,8 @@ from . import views
 app_name = 'departments'
 urlpatterns = [
     path('departments/', views.DepartmentList.as_view()),
-    path('departments/<int:pk>/', views.DepartmentDetails.as_view())
+    path('departments/<int:pk>/', views.DepartmentDetails.as_view()),
+    path('departments/rename/<int:department_id>', views.RenameDepartment.as_view())
 ]
 
 # allow add to url suffixes like .json
