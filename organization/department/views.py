@@ -18,13 +18,33 @@ class DepartmentDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Department.objects.all()
     serializer_class = serializers.DepartmentSerializer
 
-
 class SubordinateList(APIView):
+
+    def is_show_all(self, params):
+        if 'all' in params:
+            return bool(params['all'])
+        return False
+
+    def get_strait_subordinates(self, department_id):
+        return Department.objects.filter(parent_department_id=department_id)
+
+    def get_all_subordinates(self, department_id, visited):
+        subordinates = self.get_strait_subordinates(department_id)
+        visited.extend(subordinates)
+        for dep in subordinates:
+            self.get_all_subordinates(dep.id, visited)
+        return visited
+
+    def get_subordinates(self, department_id, all_subordinates=False):
+        if all_subordinates:
+            return self.get_all_subordinates(department_id, [])
+        return self.get_strait_subordinates(department_id)
 
     def get(self, request, department_id):
         get_object_or_404(Department, pk=department_id)
-        departments = list(filter(lambda d: d.parent_department_id == department_id, Department.objects.all()))
-        return Response(serializers.DepartmentSerializer(departments, many=True).data)
+        show_all = self.is_show_all(request.GET)
+        subordinates = self.get_subordinates(department_id, show_all)
+        return Response(serializers.DepartmentSerializer(subordinates, many=True).data)
 
 
 class RenameDepartment(APIView):

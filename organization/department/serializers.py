@@ -16,7 +16,6 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = '__all__'
 
-
     def get_department_leader(self, dep):
         department_employees = get_department_employees(dep.id)
         leader = next((e for e in department_employees), None)
