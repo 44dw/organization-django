@@ -46,6 +46,22 @@ class SubordinateList(APIView):
         subordinates = self.get_subordinates(department_id, show_all)
         return Response(serializers.DepartmentSerializer(subordinates, many=True).data)
 
+class UpperList(generics.ListAPIView):
+    queryset = Department.objects.all()
+    serializer_class = serializers.DepartmentSerializer
+
+    def collect_upper_departments(self, department, visited):
+        if department is None:
+            return visited
+        visited.append(department)
+        parent = department.parent_department
+        return self.collect_upper_departments(parent, visited)
+
+    def get_queryset(self):
+        department_id = self.kwargs['department_id']
+        department = super().get_queryset().get(id=department_id)
+        return self.collect_upper_departments(department.parent_department, [])
+
 
 class RenameDepartment(APIView):
 
