@@ -60,3 +60,16 @@ class RenameDepartment(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MoveDepartment(APIView):
+
+    def put(self, request, department_id, parent_department_id):
+        department = get_object_or_404(Department, pk=department_id)
+        new_parent_department = get_object_or_404(Department, pk=parent_department_id)
+        department.parent_department = new_parent_department
+        serializer = serializers.DepartmentSerializer(department, data=model_to_dict(department))
+        if serializer.is_valid():
+            department.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

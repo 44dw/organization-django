@@ -11,7 +11,7 @@ def validate_name_not_exists(value):
 
 
 class Department(models.Model):
-    name = models.CharField(max_length=25, validators=[validate_name_not_exists])
+    name = models.CharField(max_length=25)
     creation_date = models.DateField(validators=[MaxValueValidator(limit_value=date.today())])
     parent_department = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
