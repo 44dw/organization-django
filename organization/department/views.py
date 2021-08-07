@@ -18,6 +18,16 @@ class DepartmentDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Department.objects.all()
     serializer_class = serializers.DepartmentSerializer
 
+
+class DepartmentByName(generics.ListAPIView):
+    queryset = Department.objects.all()
+    serializer_class = serializers.DepartmentSerializer
+
+    def get_queryset(self):
+        name = self.kwargs['name']
+        return Department.objects.filter(name=name)
+
+
 class SubordinateList(APIView):
 
     def is_show_all(self, params):

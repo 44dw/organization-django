@@ -9,7 +9,8 @@ urlpatterns = [
     path('departments/rename/<int:department_id>', views.RenameDepartment.as_view()),
     path('departments/subordinate/<int:department_id>', views.SubordinateList.as_view()),
     path('departments/move/<int:department_id>/<int:parent_department_id>', views.MoveDepartment.as_view()),
-    path('departments/upper/<int:department_id>/', views.UpperList.as_view())
+    path('departments/upper/<int:department_id>/', views.UpperList.as_view()),
+    path('departments/name/<name>/', views.DepartmentByName.as_view())
 ]
 
 # allow add to url suffixes like .json
