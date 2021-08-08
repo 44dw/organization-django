@@ -3,6 +3,7 @@ from . import serializers
 from .models import Employee
 from django.shortcuts import get_object_or_404
 from datetime import date
+from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
 from rest_framework.response import Response
 
@@ -31,8 +32,10 @@ class Dismiss(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         pk = kwargs['pk']
+        data = request.data
+        dismissal_date = parse_date(data['date']) if 'date' in data else date.today()
         employee = get_object_or_404(Employee, pk=pk)
-        employee.dismissal_date = date.today()
+        employee.dismissal_date = dismissal_date
         result = model_to_dict(employee)
         serializer = serializers.EmployeeSerializer(employee, data=result)
         serializer.is_valid(raise_exception=True)
