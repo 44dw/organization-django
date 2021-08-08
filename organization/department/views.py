@@ -20,13 +20,10 @@ class DepartmentDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.DepartmentSerializer
 
 
-class DepartmentByName(generics.ListAPIView):
+class DepartmentByName(generics.RetrieveAPIView):
     queryset = Department.objects.all()
     serializer_class = serializers.DepartmentSerializer
-
-    def get_queryset(self):
-        name = self.kwargs['name']
-        return Department.objects.filter(name=name)
+    lookup_field = 'name'
 
 
 class SubordinateList(APIView):
