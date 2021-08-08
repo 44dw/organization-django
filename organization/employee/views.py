@@ -11,3 +11,12 @@ class EmployeeList(generics.ListCreateAPIView):
 class EmployeeDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Employee.objects.all()
     serializer_class = serializers.EmployeeSerializer
+
+
+class DepartmentEmployees(generics.ListAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = serializers.EmployeeSerializer
+
+    def get_queryset(self):
+        department_id = self.kwargs['department_id']
+        return filter(lambda e: e.department_id == department_id, super().get_queryset())

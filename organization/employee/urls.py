@@ -5,7 +5,8 @@ from . import views
 app_name = 'employees'
 urlpatterns = [
     path('employees/', views.EmployeeList.as_view()),
-    path('employees/<int:pk>/', views.EmployeeDetails.as_view())
+    path('employees/<int:pk>/', views.EmployeeDetails.as_view()),
+    path('employees/department/<int:department_id>/', views.DepartmentEmployees.as_view()),
 ]
 
 
