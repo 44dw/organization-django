@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from . import serializers
 from .models import Department
+from employee.models import Employee
 # from rest_framework.permissions import IsAdminUser
 
 
@@ -99,3 +100,12 @@ class MoveDepartment(APIView):
             department.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DepartmentSalary(APIView):
+
+    def get(self, request, department_id):
+        department = get_object_or_404(Department, pk=department_id)
+        employees = Employee.objects.filter(department_id=department_id)
+        pool_salary = sum(map(lambda e: e.salary, employees))
+        return Response({"salary": pool_salary})
