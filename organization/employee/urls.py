@@ -8,6 +8,7 @@ urlpatterns = [
     path('employees/<int:pk>/', views.EmployeeDetails.as_view()),
     path('employees/department/<int:department_id>/', views.DepartmentEmployees.as_view()),
     path('employees/dismiss/<int:pk>/', views.Dismiss.as_view()),
+    path('employees/<int:pk>/move/<int:department_id>', views.MoveToDepartment.as_view()),
 ]
 
 
