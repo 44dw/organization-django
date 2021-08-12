@@ -7,6 +7,7 @@ from datetime import date
 from django.utils.dateparse import parse_date
 from django.forms.models import model_to_dict
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 class EmployeeList(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
@@ -59,4 +60,19 @@ class MoveToDepartment(generics.UpdateAPIView):
         serializer = serializers.EmployeeSerializer(employee, data=result)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        return Response(serializer.data)
+
+
+class MoveAllToDepartment(APIView):
+
+    def put(self, _, department_id, new_department_id):
+        get_object_or_404(Department, pk=department_id)
+        new_parent_department = get_object_or_404(Department, pk=new_department_id)
+        department_employees = Employee.objects.filter(department_id=department_id)
+
+        for e in department_employees:
+            e.department = new_parent_department
+
+        Employee.objects.bulk_update(department_employees, ['department'])
+        serializer = serializers.EmployeeSerializer(department_employees, many=True)
         return Response(serializer.data)

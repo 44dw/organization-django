@@ -9,6 +9,7 @@ urlpatterns = [
     path('employees/department/<int:department_id>/', views.DepartmentEmployees.as_view()),
     path('employees/dismiss/<int:pk>/', views.Dismiss.as_view()),
     path('employees/<int:pk>/move/<int:department_id>', views.MoveToDepartment.as_view()),
+    path('employees/of_department/<int:department_id>/move/<int:new_department_id>', views.MoveAllToDepartment.as_view()),
 ]
 
 

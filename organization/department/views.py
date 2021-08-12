@@ -98,7 +98,6 @@ class MoveDepartment(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class DepartmentSalary(APIView):
 
     def get(self, request, department_id):
