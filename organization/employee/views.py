@@ -76,3 +76,17 @@ class MoveAllToDepartment(APIView):
         Employee.objects.bulk_update(department_employees, ['department'])
         serializer = serializers.EmployeeSerializer(department_employees, many=True)
         return Response(serializer.data)
+
+
+class EmployeeSupervisor(generics.RetrieveAPIView):
+    queryset = Employee.objects.all()
+    serializer_class = serializers.EmployeeSerializer
+
+    def get_object(self):
+        employee = super().get_object()
+
+        if employee.is_leader:
+            return employee
+
+        department_employees = Employee.objects.filter(department_id=employee.department_id)
+        return next((e for e in department_employees if e.is_leader), None)

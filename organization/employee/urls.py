@@ -10,6 +10,7 @@ urlpatterns = [
     path('employees/dismiss/<int:pk>/', views.Dismiss.as_view()),
     path('employees/<int:pk>/move/<int:department_id>', views.MoveToDepartment.as_view()),
     path('employees/of_department/<int:department_id>/move/<int:new_department_id>', views.MoveAllToDepartment.as_view()),
+    path('employees/<int:pk>/supervisor', views.EmployeeSupervisor.as_view()),
 ]
 
 
