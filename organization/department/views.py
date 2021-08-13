@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . import serializers
-from .models import Department
+from .models import Department, SalaryFund
 from employee.models import Employee
 # from rest_framework.permissions import IsAdminUser
 
@@ -105,3 +105,13 @@ class DepartmentSalary(APIView):
         employees = Employee.objects.filter(department_id=department_id)
         pool_salary = sum(map(lambda e: e.salary, employees))
         return Response({"salary": pool_salary})
+
+
+class DepartmentSalaries(generics.ListCreateAPIView):
+    queryset = SalaryFund.objects.all()
+    serializer_class = serializers.SalaryFundSerializer
+
+
+class DepartmentSalaryDetails(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SalaryFund.objects.all()
+    serializer_class = serializers.SalaryFundSerializer

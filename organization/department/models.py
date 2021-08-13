@@ -17,3 +17,11 @@ class Department(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SalaryFund(models.Model):
+    department = models.OneToOneField(Department, on_delete=models.PROTECT, primary_key=True)
+    salary = models.PositiveBigIntegerField()
+
+    def __str__(self):
+        return f"{self.department.name}: {self.salary}"

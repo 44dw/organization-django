@@ -11,7 +11,9 @@ urlpatterns = [
     path('departments/move/<int:department_id>/<int:parent_department_id>', views.MoveDepartment.as_view()),
     path('departments/upper/<int:department_id>/', views.UpperList.as_view()),
     path('departments/name/<name>/', views.DepartmentByName.as_view()),
-    path('departments/salary/<int:department_id>/', views.DepartmentSalary.as_view())
+    path('departments/salary/<int:department_id>/', views.DepartmentSalary.as_view()),
+    path('salaries/', views.DepartmentSalaries.as_view()),
+    path('salaries/<int:pk>/', views.DepartmentSalaryDetails.as_view())
 ]
 
 # allow add to url suffixes like .json

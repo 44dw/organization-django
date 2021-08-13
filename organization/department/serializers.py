@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Department
+from .models import Department, SalaryFund
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer
 
@@ -37,3 +37,9 @@ class DepartmentSerializer(serializers.ModelSerializer):
         all_depts = Department.objects.all()
         validate_parent_department_not_null(value, all_depts)
         return value
+
+
+class SalaryFundSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalaryFund
+        fields = '__all__'
