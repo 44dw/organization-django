@@ -22,7 +22,7 @@ class Employee(models.Model):
     employment_date = models.DateField(validators=[MaxValueValidator(limit_value=date.today())])
     dismissal_date = models.DateField(validators=[MaxValueValidator(limit_value=date.today())], null=True)
     position = models.CharField(max_length=50)
-    salary = models.BigIntegerField()
+    salary = models.PositiveBigIntegerField()
     is_leader = models.BooleanField()
     department = models.ForeignKey('department.Department',
                                    # protecting Department from deleting if it has employees
