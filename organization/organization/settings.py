@@ -42,7 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions'
+    'django_extensions',
+    'django_crontab'
+]
+
+CRONJOBS = [
+    ('* * * * *', 'organization.department.jobs.calk_salary_fund.calk_salary_fund')
 ]
 
 MIDDLEWARE = [
