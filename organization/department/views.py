@@ -48,10 +48,10 @@ class SubordinateList(APIView):
             return self.get_all_subordinates(department_id, [])
         return self.get_strait_subordinates(department_id)
 
-    def get(self, request, department_id):
-        get_object_or_404(Department, pk=department_id)
+    def get(self, request, pk):
+        get_object_or_404(Department, pk=pk)
         show_all = self.is_show_all(request.GET)
-        subordinates = self.get_subordinates(department_id, show_all)
+        subordinates = self.get_subordinates(pk, show_all)
         return Response(serializers.DepartmentSerializer(subordinates, many=True).data)
 
 class UpperList(generics.ListAPIView):
@@ -66,18 +66,18 @@ class UpperList(generics.ListAPIView):
         return self.collect_upper_departments(parent, visited)
 
     def get_queryset(self):
-        department_id = self.kwargs['department_id']
+        department_id = self.kwargs['pk']
         department = super().get_queryset().get(id=department_id)
         return self.collect_upper_departments(department.parent_department, [])
 
 
 class RenameDepartment(APIView):
 
-    def put(self, request, department_id):
-        new_department_name = request.data['name']
+    def put(self, request, pk):
+        new_department_name = request.query_params['name']
         if not new_department_name:
             return Response('name must be provided!', status=status.HTTP_400_BAD_REQUEST)
-        department = get_object_or_404(Department, pk=department_id)
+        department = get_object_or_404(Department, pk=pk)
         department.name = new_department_name
         serializer = serializers.DepartmentSerializer(department, data=model_to_dict(department))
         if serializer.is_valid():
@@ -88,8 +88,8 @@ class RenameDepartment(APIView):
 
 class MoveDepartment(APIView):
 
-    def put(self, request, department_id, parent_department_id):
-        department = get_object_or_404(Department, pk=department_id)
+    def put(self, request, pk, parent_department_id):
+        department = get_object_or_404(Department, pk=pk)
         new_parent_department = get_object_or_404(Department, pk=parent_department_id)
         department.parent_department = new_parent_department
         serializer = serializers.DepartmentSerializer(department, data=model_to_dict(department))
@@ -100,9 +100,9 @@ class MoveDepartment(APIView):
 
 class DepartmentSalary(APIView):
 
-    def get(self, request, department_id):
-        department = get_object_or_404(Department, pk=department_id)
-        employees = Employee.objects.filter(department_id=department_id)
+    def get(self, request, pk):
+        department = get_object_or_404(Department, pk=pk)
+        employees = Employee.objects.filter(department_id=pk)
         pool_salary = sum(map(lambda e: e.salary, employees))
         return Response({"salary": pool_salary})
 
